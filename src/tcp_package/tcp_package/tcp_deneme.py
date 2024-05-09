@@ -1,15 +1,15 @@
-
 import rclpy
 import json
 import time
 import socket
+import threading
+from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
-from nav_msgs.msg import OccupancyGrid
-from nav_msgs.msg import Odometry
+from nav_msgs.msg import OccupancyGrid, Odometry
 
-class Netcat():
+class Netcat:
     def __init__(self):
-        self.target_host = "192.168.41.174"
+        self.target_host = "192.168.72.214"
         self.target_port = 8910
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connected = False
@@ -21,7 +21,7 @@ class Netcat():
         except ConnectionRefusedError:
             print("Bağlantı hatası: Sunucuya bağlanılamadı.")
 
-    def data_transfer(self,msg):
+    def data_transfer(self, msg):
         if not self.connected:
             self.connect()
 
@@ -38,56 +38,61 @@ class Netcat():
             self.client.close()
             self.connected = False
 
-
-class Odom_sub(Node):
-    def __init__(self):
-        super().__init__('pose_subscriber')
-        self.netcat = Netcat()
+class OdomSub(Node):
+    def __init__(self, netcat):
+        super().__init__('odom_subscriber')
+        self.netcat = netcat
         self.subscription = self.create_subscription(Odometry, 'odom', self.odom_callback, 10)
 
     def odom_callback(self, msg):
         odom_data = {
-            "\nmsg_type": "ODOMETRY",
-            "\nx": msg.pose.pose.position.x,
-            "\ny": msg.pose.pose.position.y,
-            "\nw_": msg.pose.pose.orientation.w,
-            "\nend": "**********end***********\n"
+            "msg_type": "ODOMETRY",
+            "x": msg.pose.pose.position.x,
+            "y": msg.pose.pose.position.y,
+            "w": msg.pose.pose.orientation.w,
+            "end": "**********end***********\n"
         }
         odom_msg_str = json.dumps(odom_data)
         self.netcat.data_transfer(odom_msg_str.encode()) 
-        time.sleep(5)
 
-class Map_Sub(Node):
-    def __init__(self):
+
+class MapSub(Node):
+    def __init__(self, netcat):
         super().__init__('map_subscriber')
-        #self.netcat = Netcat()
+        self.netcat = netcat
         self.subscription = self.create_subscription(OccupancyGrid, 'map', self.map_callback, 10)
 
     def map_callback(self, msg):
         map_data = list(msg.data)
 
         map_json = {
-            "\nmsg_type": "MAP",
-            "\nwidth": msg.info.width,
-            "\nheight": msg.info.height,
-            "\nresolution": msg.info.resolution,
-            "\ndata": map_data,
-            "\nend": "**********end***********\n"
+            "msg_type": "MAP",
+            "width": msg.info.width,
+            "height": msg.info.height,
+            "resolution": msg.info.resolution,
+            "data": map_data,
+            "end": "**********end***********\n"
         }
         map_msg_str = json.dumps(map_json)
         self.netcat.data_transfer(map_msg_str.encode()) 
-        time.sleep(5)
 
-    
 def main(args=None):
     rclpy.init(args=args)
-    Odom = Odom_sub()
-    #Map  = Map_Sub()
+    netcat = Netcat()
+    odom = OdomSub(netcat)
+    map_sub = MapSub(netcat)
 
-    rclpy.spin_once(Odom)
-    #rclpy.spin_once(Map)
+    executor = MultiThreadedExecutor()
+    executor.add_node(odom)
+    executor.add_node(map_sub)
 
-    rclpy.shutdown()
+    try:
+      executor.spin()
+    finally:
+      executor.shutdown()
 
+    odom.destroy_node()
+    map_sub.destroy_node()
+    
 if __name__ == '__main__':
     main()
