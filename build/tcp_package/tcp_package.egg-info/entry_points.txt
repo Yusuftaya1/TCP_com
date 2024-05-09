@@ -1,0 +1,5 @@
+[console_scripts]
+tcp_node = tcp_package.tcp_node:main
+tcp_try = tcp_package.tcp_deneme:main
+tcp_try2 = tcp_package.tcp_deneme2:main
+

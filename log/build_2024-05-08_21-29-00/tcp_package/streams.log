@@ -1,0 +1,26 @@
+[0.590s] Invoking command in '/home/yusuf/tcp/src/tcp_package': PYTHONPATH=/home/yusuf/tcp/build/tcp_package/prefix_override:/home/yusuf/tcp/install/tcp_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/tcp_package build --build-base /home/yusuf/tcp/build/tcp_package/build install --record /home/yusuf/tcp/build/tcp_package/install.log --single-version-externally-managed install_data
+[0.817s] running egg_info
+[0.818s] writing ../../build/tcp_package/tcp_package.egg-info/PKG-INFO
+[0.818s] writing dependency_links to ../../build/tcp_package/tcp_package.egg-info/dependency_links.txt
+[0.818s] writing entry points to ../../build/tcp_package/tcp_package.egg-info/entry_points.txt
+[0.818s] writing requirements to ../../build/tcp_package/tcp_package.egg-info/requires.txt
+[0.818s] writing top-level names to ../../build/tcp_package/tcp_package.egg-info/top_level.txt
+[0.821s] reading manifest file '../../build/tcp_package/tcp_package.egg-info/SOURCES.txt'
+[0.822s] writing manifest file '../../build/tcp_package/tcp_package.egg-info/SOURCES.txt'
+[0.822s] running build
+[0.822s] running build_py
+[0.822s] copying tcp_package/tcp_deneme.py -> /home/yusuf/tcp/build/tcp_package/build/lib/tcp_package
+[0.822s] running install
+[0.823s] running install_lib
+[0.824s] copying /home/yusuf/tcp/build/tcp_package/build/lib/tcp_package/tcp_deneme.py -> /home/yusuf/tcp/install/tcp_package/lib/python3.10/site-packages/tcp_package
+[0.825s] byte-compiling /home/yusuf/tcp/install/tcp_package/lib/python3.10/site-packages/tcp_package/tcp_deneme.py to tcp_deneme.cpython-310.pyc
+[0.827s] running install_data
+[0.827s] copying package.xml -> /home/yusuf/tcp/install/tcp_package/share/tcp_package
+[0.828s] running install_egg_info
+[0.834s] removing '/home/yusuf/tcp/install/tcp_package/lib/python3.10/site-packages/tcp_package-0.0.0-py3.10.egg-info' (and everything under it)
+[0.834s] Copying ../../build/tcp_package/tcp_package.egg-info to /home/yusuf/tcp/install/tcp_package/lib/python3.10/site-packages/tcp_package-0.0.0-py3.10.egg-info
+[0.835s] running install_scripts
+[0.855s] Installing tcp_node script to /home/yusuf/tcp/install/tcp_package/lib/tcp_package
+[0.855s] Installing tcp_try script to /home/yusuf/tcp/install/tcp_package/lib/tcp_package
+[0.856s] writing list of installed files to '/home/yusuf/tcp/build/tcp_package/install.log'
+[0.884s] Invoked command in '/home/yusuf/tcp/src/tcp_package' returned '0': PYTHONPATH=/home/yusuf/tcp/build/tcp_package/prefix_override:/home/yusuf/tcp/install/tcp_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/tcp_package build --build-base /home/yusuf/tcp/build/tcp_package/build install --record /home/yusuf/tcp/build/tcp_package/install.log --single-version-externally-managed install_data
