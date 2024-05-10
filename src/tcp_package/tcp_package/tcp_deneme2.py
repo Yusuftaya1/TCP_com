@@ -1,12 +1,12 @@
 import rclpy
 import json
-import time
 import socket
 import threading
 from rclpy.node import Node
 from nav_msgs.msg import OccupancyGrid
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
+from rclpy.executors import MultiThreadedExecutor
 
 class Netcat():
     def __init__(self):
@@ -110,7 +110,20 @@ def main(args=None):
     map = Map_Sub()
     velocity = VelocitySubscriber()
 
-    # Her bir düğüm için ayrı döngülerde spin çağrıları yapılır
+    executor = MultiThreadedExecutor()
+    executor.add_node(odom)
+    executor.add_node(map)
+    executor.add_node(velocity)
+
+    executor.spin()
+    executor.shutdown()
+
+"""
+def maintotry():
+    odom = Odom_sub()
+    map = Map_Sub()
+    velocity = VelocitySubscriber()
+
     odom_thread = threading.Thread(target=lambda: rclpy.spin(odom))
     map_thread = threading.Thread(target=lambda: rclpy.spin(map))
     velocity_thread = threading.Thread(target=lambda: rclpy.spin(velocity))
@@ -124,21 +137,7 @@ def main(args=None):
     velocity_thread.join()
 
     rclpy.shutdown()
-
-    
-def main2(args=None):
-    rclpy.init(args=args)
-    NetcaT_sample=Netcat()
-
-    Odom = Odom_sub()
-    Map  = Map_Sub()
-    Velocity = VelocitySubscriber()
-    
-    rclpy.spin_once(Map)
-    rclpy.spin_once(Odom)
-    rclpy.spin_once(Velocity)
-
-    rclpy.shutdown()
+"""
     
 if __name__ == '__main__':
     main()
